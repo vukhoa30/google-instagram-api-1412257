@@ -1,0 +1,3 @@
+API for project MyProject: AIzaSyBmI3taKCae6_U2omqog5aj1CVta5xLNQg
+AIzaSyBh4gwoF4K9B3GZQIHK2gL0MIkHGc9Vnj8
+>> AIzaSyC6ymEzCR5_Lvj1xSon7EAADZN901Td0bQ
