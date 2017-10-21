@@ -1,3 +1,4 @@
 API for project MyProject: AIzaSyBmI3taKCae6_U2omqog5aj1CVta5xLNQg
 AIzaSyBh4gwoF4K9B3GZQIHK2gL0MIkHGc9Vnj8
->> AIzaSyC6ymEzCR5_Lvj1xSon7EAADZN901Td0bQ
+>> Google Geocoding key: AIzaSyC6ymEzCR5_Lvj1xSon7EAADZN901Td0bQ
+Instagram access_token: 6250944971.c954949.e4e34c3dc3414491b55f677a2f580545

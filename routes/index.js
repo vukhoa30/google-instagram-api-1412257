@@ -5,7 +5,8 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { 
     title: 'Express',
-    APIKey: 'AIzaSyC6ymEzCR5_Lvj1xSon7EAADZN901Td0bQ'
+    APIKey: 'AIzaSyC6ymEzCR5_Lvj1xSon7EAADZN901Td0bQ',
+    access_token: '6250944971.c954949.e4e34c3dc3414491b55f677a2f580545'
   });
 });
 

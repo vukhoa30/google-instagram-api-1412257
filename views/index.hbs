@@ -1,11 +1,19 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 <div>
-  <input type="text" placeholder="address" id="address">
-  <button id="search">Do it</button>
-  <div id="output"></div>
-  <br/>
-  
+  <div class="row">
+    <input type="text" placeholder="address" id="address" size="10">
+    <button id="search">Do it</button>
+    <div id="outputSearch"></div>
+  </div>
+  <br />
+  <div class="row">
+    <input type="text" placeholder="lat" id="lat" width="75px"><br />
+    <input type="text" placeholder="long" id="lng" width="75px">
+    <button id="locations">Locate</button>
+    <div id="outputLocation"></div>
+    <div id="outputMedia"></div>
+  </div>
 </div>
 
 <script>
@@ -24,7 +32,7 @@
         type: 'GET',
         url,
         success: function(data) {
-          $('#output').html(
+          $('#outputSearch').html(
             data.results[0].formatted_address +
             "<div>lat: " + data.results[0].geometry.location.lat + "</div>" +
             "<div>lng: " + data.results[0].geometry.location.lng + "</div>"
@@ -34,6 +42,70 @@
           console.log('damn');
         }
       })
+    })
+    $('#lat, #lng').keypress(function(e) {
+      if (e.keyCode == 13) {
+        $('#locations').click();
+      }
+    })
+    $('#locations').on('click', function(e) {
+      var lat = $('#lat').val();
+      var lng = $('#lng').val();
+      if (isNaN(lat) === false && isNaN(lng) === false) {
+        var url = 'https://api.instagram.com/v1/locations/search?lat=' +
+          lat + '&lng=' + lng + '&access_token={{access_token}}';
+        console.log(url);
+        $.ajax({
+          type: 'GET',
+          dataType: 'jsonp',
+          url,
+          success: function(data) {
+            var list = "<ol>";
+            for (var i = 0; i < data.data.length; i++) {
+              list += "<li class='locationItem' data-id='" + data.data[i].id + "'>" + data.data[i].name + "</li>";
+            }
+            list += "</ol>"
+            $('#outputLocation').html(
+              list
+            );
+            $(".locationItem").on("click", function(e) {
+              var tmpUrl = 'https://api.instagram.com/v1/locations/' + 
+                $(this).attr('data-id') + '/media/recent?access_token={{access_token}}';
+              console.log(tmpUrl);
+              $.ajax({
+                type: 'GET',
+                dataType: 'jsonp',
+                url: tmpUrl,
+                success: function(data) {
+                  var media;// = "<div class='media'>";
+                  for (var i = 0; i < data.data.length; i++) {
+                    media = "<div class='media col col-md-4'><div><a href='" + data.data[i].link + "'><img src='"
+                      + data.data[i].images.thumbnail.url + "'></a></div>\
+                      <div>Location: " + data.data[i].location.name + "</div>\
+                      <div>Comments: " + data.data[i].comments.count + "</div>\
+                      <div>Likes: " + data.data[i].likes.count + "</div>\
+                      <div>Caption: " + data.data[i].caption.text + "</div></div>";
+                  }
+                  console.log("media: " + media);
+                  $("#outputMedia").html(
+                    media
+                  );
+                },
+                error: function(a,b,c) {
+                  console.log('damn');
+                }
+              })
+              alert($(this).attr('data-id'));
+            })
+          },
+          error: function(a,b,c) {
+            console.log('damn');
+          }
+        })
+      }
+      else {
+        alert('dude, the values you entered in those two boxes are not numbers, what do you expect omg')
+      }
     })
   })
 </script>
