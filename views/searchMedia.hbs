@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h2>Instagram API - Location's Media</h2>
+    <input type="text" id="location_id" placeholder="Location ID"/>
+    <button id="searchMedia">Search for media</button>
+  </div>
+</div>
+
+<script>
+  $('#mediaNav').addClass('active');
+  $('#location_id').keypress(function(e) {
+    if (e.keyCode == 13) {
+      $('#searchMedia').click();
+    }
+  })
+  $('#searchMedia').on('click', function(e) {
+    window.location.href = '/media/' + $('#location_id').val();
+  })
+</script>

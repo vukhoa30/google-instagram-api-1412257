@@ -1,23 +1,27 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
 <div>
-  <div class="row">
-    <input type="text" placeholder="address" id="address" size="10">
-    <button id="search">Do it</button>
-    <div id="outputSearch"></div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>Google Geocoding API</h2>
+      <input type="text" placeholder="address" id="address" size="70">
+      <button id="search">Tìm tọa độ</button>
+      <div id="outputSearch"></div>
+    </div>
   </div>
-  <br />
-  <div class="row">
-    <input type="text" placeholder="lat" id="lat" width="75px"><br />
-    <input type="text" placeholder="long" id="lng" width="75px">
-    <button id="locations">Locate</button>
-    <div id="outputLocation"></div>
-    <div id="outputMedia"></div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <h2>Instagram API - locations search</h2>
+      <input type="text" placeholder="lat" id="lat" size="15"><br />
+      <input type="text" placeholder="long" id="lng" size="15">
+      <button id="locations">Tìm các địa điểm</button>
+      <div id="outputLocation"></div>
+      <div id="outputMedia"></div>
+    </div>
   </div>
 </div>
 
 <script>
   $(function() {
+    $('#home').addClass('active');
     $('#address').keypress(function(e) {
       if (e.keyCode == 13) {
         $('#search').click();
@@ -33,10 +37,13 @@
         url,
         success: function(data) {
           $('#outputSearch').html(
-            data.results[0].formatted_address +
-            "<div>lat: " + data.results[0].geometry.location.lat + "</div>" +
-            "<div>lng: " + data.results[0].geometry.location.lng + "</div>"
+            "<h3>Kết quả:</h3>" +
+            "<div>Formatted address: " + data.results[0].formatted_address + "</div>" +
+            "<div>Latitude: " + data.results[0].geometry.location.lat + "</div>" +
+            "<div>Longitude: " + data.results[0].geometry.location.lng + "</div>"
           );
+          $('#lat').val(data.results[0].geometry.location.lat);
+          $('#lng').val(data.results[0].geometry.location.lng);        
         },
         error: function(a,b,c) {
           console.log('damn');
@@ -62,10 +69,14 @@
           success: function(data) {
             var list = "<ol>";
             for (var i = 0; i < data.data.length; i++) {
-              list += "<li class='locationItem' data-id='" + data.data[i].id + "'>" + data.data[i].name + "</li>";
+              list += "<li class='locationItem' data-id='" + data.data[i].id + "'>\
+              <a href='/media/" + data.data[i].id + "'>" + data.data[i].name + "</a>\
+              (id: " + data.data[i].id + ", latitude: " + data.data[i].latitude + 
+              ", longitude: " + data.data[i].longitude + ")</li>";
             }
             list += "</ol>"
             $('#outputLocation').html(
+              "<h3>Các địa điểm gần tọa độ đã nhập:</h3>" +
               list
             );
             $(".locationItem").on("click", function(e) {
@@ -77,7 +88,7 @@
                 dataType: 'jsonp',
                 url: tmpUrl,
                 success: function(data) {
-                  var media;// = "<div class='media'>";
+                  var media;
                   for (var i = 0; i < data.data.length; i++) {
                     media = "<div class='media col col-md-4'><div><a href='" + data.data[i].link + "'><img src='"
                       + data.data[i].images.thumbnail.url + "'></a></div>\
@@ -95,7 +106,6 @@
                   console.log('damn');
                 }
               })
-              alert($(this).attr('data-id'));
             })
           },
           error: function(a,b,c) {

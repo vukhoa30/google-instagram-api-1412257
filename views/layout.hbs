@@ -2,12 +2,23 @@
 <html>
   <head>
     <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
-    <script src="/javascripts/jquery-3.2.1.min.js"></script>
-    <script src="/javascripts/bootstrap.min.js"></script>
   </head>
   <body>
+    <script src="/javascripts/jquery-3.2.1.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Google-Instagram APIs</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li id="home"><a href="/">Home</a></li>
+          <li id="mediaNav"><a href="/media">Media</a></li>
+        </ul>
+      </div>
+    </nav>
+
     <div class="container">
       {{{body}}}
     </div>
