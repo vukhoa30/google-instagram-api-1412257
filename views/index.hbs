@@ -79,34 +79,6 @@
               "<h3>Các địa điểm gần tọa độ đã nhập:</h3>" +
               list
             );
-            $(".locationItem").on("click", function(e) {
-              var tmpUrl = 'https://api.instagram.com/v1/locations/' + 
-                $(this).attr('data-id') + '/media/recent?access_token={{access_token}}';
-              console.log(tmpUrl);
-              $.ajax({
-                type: 'GET',
-                dataType: 'jsonp',
-                url: tmpUrl,
-                success: function(data) {
-                  var media;
-                  for (var i = 0; i < data.data.length; i++) {
-                    media = "<div class='media col col-md-4'><div><a href='" + data.data[i].link + "'><img src='"
-                      + data.data[i].images.thumbnail.url + "'></a></div>\
-                      <div>Location: " + data.data[i].location.name + "</div>\
-                      <div>Comments: " + data.data[i].comments.count + "</div>\
-                      <div>Likes: " + data.data[i].likes.count + "</div>\
-                      <div>Caption: " + data.data[i].caption.text + "</div></div>";
-                  }
-                  console.log("media: " + media);
-                  $("#outputMedia").html(
-                    media
-                  );
-                },
-                error: function(a,b,c) {
-                  console.log('damn');
-                }
-              })
-            })
           },
           error: function(a,b,c) {
             console.log('damn');
