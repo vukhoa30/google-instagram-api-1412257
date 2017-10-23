@@ -8,6 +8,8 @@
 <div id="outputMedia"></div>
 
 <script>
+  jQuery.noConflict();
+  (function($){
   $(function() {
     $('#mediaNav').addClass('active');
     var tmpUrl = 'https://api.instagram.com/v1/locations/{{locationID}}/media/recent?access_token={{access_token}}';
@@ -17,17 +19,28 @@
       dataType: 'jsonp',
       url: tmpUrl,
       success: function(data) {
-        var media = '';
-        console.log('length: ' + data.data.length)
+        var medias = '';
+        console.log('length: ' + data.data.length);
         for (var i = 0; i < data.data.length; i++) {
-          media += "\
+          //console.log(data.data[i].caption.text);
+          //data.data[i].caption.text = //bỏ các emoji vì ko thể hiển thị
+            //data.data[i].caption.text.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
+          try {
+            data.data[i].caption.text = data.data[i].caption.text;
+          }
+          catch (e) {
+            data.data[i].caption = { text: "Không thể đọc được caption" };
+          }
+          var content = (data.data[i].type === "video") ?
+            ("<video><source src='" + data.data[i].videos.standard_resolution.url + "' type='video/mp4' /></video>") :
+            ("<img src='" + data.data[i].images.low_resolution.url + "'>");
+          var nextMedia = "\
             <div class='col col-md-4 col-sm-6'>\
               <div class='panel panel-default'>\
                 <div class='panel-body'>\
-                  <div>\
-                    <a href='" + data.data[i].link + "'><img src='" + data.data[i].images.low_resolution.url + "'></a>\
-                  </div>\
+                  <div>" + content + "</div>\
                   <div><i>Location: </i>" + data.data[i].location.name + "</div>\
+                  <div><a target='_blank' href='" + data.data[i].link + "'><i>Link</i></a></div>\
                   <div><i>Caption: </i>" + data.data[i].caption.text + "</div>\
                 </div>\
                 <div class='panel-footer'>\
@@ -35,10 +48,11 @@
                   <span class='glyphicon glyphicon-comment' aria-hidden='true'></span> " + data.data[i].comments.count + "\
                 </div>\
               </div>\
-            </div>"
+            </div>";
+          medias += nextMedia;
         }
         $("#outputMedia").html(
-          media
+          medias
         );
       },
       error: function(a,b,c) {
@@ -46,4 +60,5 @@
       }
     })
   })
+  })(jQuery);
 </script>
